@@ -19,6 +19,16 @@ _client = None
 # Flash tier, or "gemini-3.1-pro" for the hardest reasoning tasks.
 _MODEL = "gemini-3.6-flash"
 
+# Gemini 3-series models are "thinking" models: max_output_tokens caps
+# thinking tokens + visible output tokens *combined*, and thinking defaults
+# to a high effort level. Short conversational replies (Learn) usually
+# survive a small budget, but anything that has to follow a strict output
+# format (quiz JSON, SQL JSON) can burn the whole budget on reasoning and
+# come back with an empty response. Turning thinking down and giving more
+# headroom fixes that.
+_DEFAULT_MAX_TOKENS = 2048
+_THINKING_LEVEL = "low"  # "minimal" | "low" | "high" (Flash models also allow "minimal")
+
 
 def _get_client() -> genai.Client:
     global _client
@@ -32,7 +42,7 @@ def _get_client() -> genai.Client:
     return _client
 
 
-def ask(system: str, user_prompt: str, max_tokens: int = 1024) -> str:
+def ask(system: str, user_prompt: str, max_tokens: int = _DEFAULT_MAX_TOKENS) -> str:
     """Send a single-turn request and return the model's text reply."""
     client = _get_client()
     response = client.models.generate_content(
@@ -41,15 +51,30 @@ def ask(system: str, user_prompt: str, max_tokens: int = 1024) -> str:
         config=types.GenerateContentConfig(
             system_instruction=system,
             max_output_tokens=max_tokens,
+            # Gemini 3 models use thinking_level, not the older thinking_budget.
+            # Passing both raises an error, so only set one.
+            thinking_config=types.ThinkingConfig(thinking_level=_THINKING_LEVEL),
         ),
     )
     text = (response.text or "").strip()
     if not text:
-        raise RuntimeError("Model returned an empty response")
+        finish_reason = None
+        try:
+            finish_reason = response.candidates[0].finish_reason
+        except (AttributeError, IndexError, TypeError):
+            pass
+
+        if str(finish_reason) == "MAX_TOKENS" or "MAX_TOKENS" in str(finish_reason or ""):
+            raise RuntimeError(
+                "Model hit the token limit before producing any visible output "
+                "(likely spent the budget on internal reasoning). Try raising "
+                "max_tokens or lowering thinking_level further."
+            )
+        raise RuntimeError(f"Model returned an empty response (finish_reason={finish_reason})")
     return text
 
 
-def ask_json(system: str, user_prompt: str, max_tokens: int = 1024) -> dict:
+def ask_json(system: str, user_prompt: str, max_tokens: int = _DEFAULT_MAX_TOKENS) -> dict:
     """Same as ask(), but strips markdown fences and parses the result as JSON.
     Raises ValueError if the model didn't return valid JSON."""
     raw = ask(system, user_prompt, max_tokens=max_tokens)
