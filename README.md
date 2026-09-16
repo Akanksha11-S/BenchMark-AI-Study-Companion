@@ -53,7 +53,7 @@ Any host that runs a Docker container or a Python web process works. Two easy op
 **Render / Railway (Docker)**
 1. Push this repo to GitHub.
 2. Create a new Web Service, point it at the repo — it will detect the `Dockerfile` automatically.
-3. Add an environment variable `ANTHROPIC_API_KEY` with your key.
+3. Add an environment variable `GEMINI_API_KEY` with your key.
 4. Deploy. The app listens on the port the platform provides.
 
 **Railway / Heroku-style (buildpack, no Docker)**
