@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benchmark — measure what you actually know</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="wordmark">Benchmark</div>
+    <p class="tagline">DSA explanations, live quizzes, and plain-English SQL — measured against a real model and a real database, not a script.</p>
+    <svg class="signal" viewBox="0 0 920 40" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points="0,20 60,20 80,6 100,34 120,20 200,20 220,10 240,30 260,20 400,20 420,4 440,36 460,20 620,20 640,12 660,28 680,20 920,20"
+        fill="none" stroke="var(--signal)" stroke-width="2"/>
+    </svg>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="chat" class="active">Learn</button>
+    <button data-tab="quiz">Calibrate</button>
+    <button data-tab="sql">Query Bench</button>
+  </nav>
+
+  <main>
+    <!-- CHAT PANEL -->
+    <section class="panel active" id="panel-chat">
+      <div class="card">
+        <h2 class="section-title">Ask about a DSA topic</h2>
+        <p class="hint">Every answer names which reference notes it pulled from, so the retrieval step is visible — not just the model's guess.</p>
+        <div id="chatLog"></div>
+        <form class="chat-input" id="chatForm">
+          <input type="text" id="chatInput" placeholder="e.g. When should I use a hash map instead of an array?" autocomplete="off">
+          <button class="primary" type="submit">Ask</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- QUIZ PANEL -->
+    <section class="panel" id="panel-quiz">
+      <div class="card">
+        <h2 class="section-title">Calibrate your understanding</h2>
+        <p class="hint">Pick a topic. Five questions get generated fresh each time, with an explanation after every answer.</p>
+        <div class="topic-grid" id="topicGrid"></div>
+        <button class="primary" id="startQuizBtn" style="margin-top:10px;">Run calibration</button>
+        <div id="quizArea"></div>
+      </div>
+      <div class="card">
+        <h2 class="section-title">Calibration report</h2>
+        <p class="hint">Accuracy across every attempt, by topic. Stored on the server, so it persists across visits.</p>
+        <div id="weakAreas"></div>
+      </div>
+    </section>
+
+    <!-- SQL PANEL -->
+    <section class="panel" id="panel-sql">
+      <div class="card">
+        <h2 class="section-title">Data source</h2>
+        <p class="hint">A sample school database is loaded by default. Paste your own schema and data below, then load it, to work against something else.</p>
+        <textarea id="schemaInput"></textarea>
+        <div class="row" style="margin-top:10px;">
+          <button class="ghost" id="reloadDefaultBtn">Reset to default</button>
+          <button class="primary" id="loadSchemaBtn">Load this database</button>
+        </div>
+        <div class="status" id="dbStatus">Loading…</div>
+      </div>
+      <div class="card">
+        <h2 class="section-title">Ask in plain English</h2>
+        <form class="chat-input" id="sqlForm">
+          <input type="text" id="sqlInput" placeholder="e.g. Which students have a GPA above 3.5?" autocomplete="off">
+          <button class="primary" type="submit">Generate SQL</button>
+        </form>
+        <div id="sqlOut"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">Benchmark — a portfolio project. Model calls run against a live API; nothing here is scripted.</footer>
+</div>
+<script src="/app.js"></script>
+</body>
+</html>
