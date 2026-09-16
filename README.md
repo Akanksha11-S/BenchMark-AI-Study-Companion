@@ -6,7 +6,7 @@ A small full-stack app with three modules:
 - **Calibrate** — generates a 5-question multiple-choice quiz per topic on demand, with instant feedback and a persistent calibration report (accuracy by topic).
 - **Query Bench** — turns a plain-English question into SQL against a real SQLite database, blocks and flags destructive queries (DROP/DELETE/UPDATE/etc.) instead of running them blindly, and executes safe `SELECT`s live.
 
-Backend: FastAPI + SQLite. Frontend: plain HTML/CSS/JS (no build step). Model: Claude via the Anthropic API (swap providers in `backend/llm.py` if you'd rather use OpenAI or a local model).
+Backend: FastAPI + SQLite. Frontend: plain HTML/CSS/JS (no build step). Model: Gemini via the Gemini API (swap providers in `backend/llm.py` if you'd rather use OpenAI or a local model).
 
 ## Project layout
 
