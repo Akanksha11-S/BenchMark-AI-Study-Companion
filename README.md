@@ -59,5 +59,5 @@ Any host that runs a Docker container or a Python web process works. Two easy op
 **Railway / Heroku-style (buildpack, no Docker)**
 1. Push to GitHub.
 2. The `Procfile` tells the platform how to start the app (`uvicorn main:app --host 0.0.0.0 --port $PORT`).
-3. Set `ANTHROPIC_API_KEY` as an environment variable.
+3. Set `GEMINI_API_KEY` as an environment variable.
 4. Make sure the build step runs `pip install -r backend/requirements.txt`.
