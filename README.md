@@ -2,7 +2,7 @@
 
 A small full-stack app with three modules:
 
-- **Learn** — retrieval-augmented Q&A over a curated DSA notes library (keyword/tag-overlap retrieval, then Claude answers using the retrieved notes).
+- **Learn** — retrieval-augmented Q&A over a curated DSA notes library (keyword/tag-overlap retrieval)
 - **Calibrate** — generates a 5-question multiple-choice quiz per topic on demand, with instant feedback and a persistent calibration report (accuracy by topic).
 - **Query Bench** — turns a plain-English question into SQL against a real SQLite database, blocks and flags destructive queries (DROP/DELETE/UPDATE/etc.) instead of running them blindly, and executes safe `SELECT`s live.
 
